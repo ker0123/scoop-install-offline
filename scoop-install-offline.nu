@@ -5,7 +5,7 @@ def main [] {
 快捷地导出 scoop 本地安装的软件, 用以导入到离线环境下的电脑
 
     export - 导出. 先创建 list.toml, 待用户修改保留需要迁移的软件后, 下一次运行真正执行导出
-    inmport - 导入. 需要准备好 buckets / apps. 会在当前目录自动查询, 解包然后安装
+    import - 导入. 需要准备好 buckets / apps. 会在当前目录自动查询, 解包然后安装
     "
 }
 
