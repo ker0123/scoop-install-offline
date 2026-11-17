@@ -69,4 +69,12 @@ def "main import" [] {
     [$env.SCOOP, 'cache'] | path join | let scoop_cache
     log info $"^7z x apps.tar -o($scoop_cache)"
     ^7z x apps.tar $"-o($scoop_cache)" -y
+
+    # 获取安装包列表并使用 scoop 命令安装
+    ^7z l -ba apps.tar
+    | parse -r '.*  (?<name>.*?)#(?<version>.*?)#.*'
+    | each {|app| $"($app.name)@($app.version)"}
+    | let app_v_list
+    log info $"^scoop install ...($app_v_list)"
+    ^scoop install ...$app_v_list
 }
