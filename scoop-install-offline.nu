@@ -5,7 +5,7 @@ def main [] {
 快捷地导出 scoop 本地安装的软件, 用以导入到离线环境下的电脑
 
     export - 导出. 先创建 list.toml, 待用户修改保留需要迁移的软件后, 下一次运行真正执行导出
-    inmport - 导入. 需要准备好 buckets / apps. 会在当前目录自动查询, 解包然后安装
+    import - 导入. 需要准备好 buckets / apps. 会在当前目录自动查询, 解包然后安装
     "
 }
 
@@ -69,4 +69,14 @@ def "main import" [] {
     [$env.SCOOP, 'cache'] | path join | let scoop_cache
     log info $"^7z x apps.tar -o($scoop_cache)"
     ^7z x apps.tar $"-o($scoop_cache)" -y
+
+    # 获取安装包列表并使用 scoop 命令安装
+    ^7z l -ba apps.tar
+    | parse -r '.*  (?<name>.*?)#(?<version>.*?)#.*'
+    | each {|app| $"($app.name)@($app.version)"}
+    | let app_v_list
+    for app_v in $app_v_list {
+        log info $"^scoop install ($app_v) --no-update-scoop"
+        ^scoop install $app_v --no-update-scoop
+    }
 }
