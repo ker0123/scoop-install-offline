@@ -75,6 +75,8 @@ def "main import" [] {
     | parse -r '.*  (?<name>.*?)#(?<version>.*?)#.*'
     | each {|app| $"($app.name)@($app.version)"}
     | let app_v_list
-    log info $"^scoop install ...($app_v_list)"
-    ^scoop install ...$app_v_list
+    for app_v in $app_v_list {
+        log info $"^scoop install ($app_v) --no-update-scoop"
+        ^scoop install $app_v --no-update-scoop
+    }
 }
